@@ -8,7 +8,6 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/noodle",
-            "python": "${workspaceFolder}/noodle/.venv/bin/python",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/noodle"
             }
@@ -20,7 +19,6 @@
             "program": "${workspaceFolder}/noodle/main.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}/noodle",
-            "python": "${workspaceFolder}/noodle/.venv/bin/python",
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/noodle"
             }
