@@ -1,8 +1,10 @@
+from pathlib import Path
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from pynoodle import noodle, NOODLE_INIT, NOODLE_TERMINATE
 
+from noodle import settings
 from scenario.interfaces.inames import INames
 
 @asynccontextmanager
@@ -14,8 +16,16 @@ async def lifespan(app: FastAPI):
         crm.add_name('Alice')
         crm.add_name('Bob')
         crm.add_name('Charlie')
-        
+    
+    # Create ready flag file
+    ready_file = settings.MEMORY_TEMP_PATH / 'noodle_ready.flag'
+    ready_file.write_text('Noodle is ready')
+
     yield
+    
+    # Clean up flag file
+    if ready_file.exists():
+        ready_file.unlink()
     
     noodle.unmount_node('name')
     NOODLE_TERMINATE()

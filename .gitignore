@@ -216,3 +216,4 @@ node_modules
 dist/
 templates/
 resources/
+temp/
