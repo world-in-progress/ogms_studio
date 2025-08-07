@@ -1,7 +1,7 @@
 from pynoodle import RawScenarioNode
 
 from .names import Names
-from noodle.module.interfaces.inames import INames
+from scenario.interfaces.inames import INames
 from .endpoint import router
 from .hooks import MOUNT, UNMOUNT, PARAM_CONVERTER
 

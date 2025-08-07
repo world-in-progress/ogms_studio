@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from pynoodle import noodle, NOODLE_INIT, NOODLE_TERMINATE
 
-from .module.interfaces.inames import INames
+from scenario.interfaces.inames import INames
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

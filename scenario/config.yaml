@@ -1,4 +1,4 @@
-module_root: noodle.module
+module_root: scenario
 scenario_nodes:
   - name: names
   - name: hello

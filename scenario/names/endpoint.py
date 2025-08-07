@@ -2,7 +2,7 @@ from pynoodle import noodle
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from noodle.module.interfaces.inames import INames
+from scenario.interfaces.inames import INames
 
 class NameInfo(BaseModel):
     name: str
