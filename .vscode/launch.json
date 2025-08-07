@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/noodle",
+            "python": "${workspaceFolder}/noodle/.venv/bin/python",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/noodle"
+            }
+        },
+        {
+            "name": "Python: noodle main.py",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/noodle/main.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/noodle",
+            "python": "${workspaceFolder}/noodle/.venv/bin/python",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/noodle"
+            }
+        },
+        {
+            "name": "Electron: Main",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+            },
+            "args": [
+                "${workspaceFolder}/electron"
+            ],
+            "outputCapture": "std"
+        }
+    ]
+}

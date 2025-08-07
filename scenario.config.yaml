@@ -1,0 +1,6 @@
+module_root: noodle.module
+scenario_nodes:
+  - name: names
+  - name: hello
+    dependencies:
+      - names
