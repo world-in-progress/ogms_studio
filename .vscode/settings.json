@@ -1,11 +1,11 @@
 {
-    "python.defaultInterpreterPath": "./noodle/.venv/bin/python",
+    "python.defaultInterpreterPath": "${workspaceFolder}/noodle/.venv",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
     "python.analysis.autoImportCompletions": true,
     "python.analysis.autoSearchPaths": true,
     "python.analysis.extraPaths": [
-        "./noodle"
+        "${workspaceFolder}/noodle"
     ],
     "files.associations": {
         "*.py": "python"

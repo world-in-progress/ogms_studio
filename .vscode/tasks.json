@@ -4,8 +4,8 @@
         {
             "label": "Python: Run noodle main.py",
             "type": "shell",
-            "command": "${workspaceFolder}/noodle/.venv/bin/python",
-            "args": ["${workspaceFolder}/noodle/main.py"],
+            "command": "python",
+            "args": ["main.py"],
             "options": {
                 "cwd": "${workspaceFolder}/noodle"
             },
