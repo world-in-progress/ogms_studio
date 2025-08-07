@@ -181,9 +181,9 @@ wheels = [
 
 [[package]]
 name = "gdal"
-version = "3.11.3"
+version = "3.10.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/88/e8/f77e577b6d99ddf1fd69dfc6233b9deea0f94445bc979ef56652681caed1/gdal-3.11.3.tar.gz", hash = "sha256:4c3ad0fae393b5ddb093a7e4b890077839b2a6acdbd19202657fe4e881886efa", size = 878190 }
+sdist = { url = "https://files.pythonhosted.org/packages/30/db/6417c83f6e9c4169ebe57cd26e02ad01d1e0dafb9476736481f536c10517/gdal-3.10.2.tar.gz", hash = "sha256:c0cffa8ce9f9c0fa287fcc20b8271c519ca054958420e5880be8bedb432753f4", size = 838054 }
 
 [[package]]
 name = "h11"
@@ -327,7 +327,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "gdal", specifier = ">=3.11.3" },
+    { name = "gdal", specifier = "==3.10.2" },
     { name = "py-noodle", specifier = ">=0.1.0" },
 ]
 
