@@ -127,9 +127,10 @@ function createTexture2D(gl: WebGL2RenderingContext, level: number, width: numbe
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 
     if (resource) {
-        resource instanceof ImageBitmap
-            ? gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, 0, format!, type!, resource)
-            : gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, 0, format!, type!, resource)
+        if (resource instanceof ImageBitmap)
+            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, 0, format!, type!, resource)
+        else
+            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, 0, format!, type!, resource)
     }
     else {
         gl.texImage2D(gl.TEXTURE_2D, level, internalFormat, width, height, 0, format, type, null)

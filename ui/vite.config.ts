@@ -42,6 +42,7 @@ export default defineConfig(({ mode }) => {
         resolve: {
             alias: {
                 "@": path.resolve(__dirname, "./src"),
+                "@scenario": path.resolve(process.cwd(), "./scenario"),
             },
         },
         optimizeDeps: {
