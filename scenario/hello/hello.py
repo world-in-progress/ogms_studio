@@ -1,6 +1,6 @@
 from pynoodle import crm, noodle
-from noodle.module.interfaces.ihello import IHello
-from noodle.module.interfaces.inames import INames
+from scenario.interfaces.ihello import IHello
+from scenario.interfaces.inames import INames
 
 @crm
 class Hello(IHello):
