@@ -1,4 +1,5 @@
 import io
+from math import ceil
 from pynoodle import crm
 from pathlib import Path
 import matplotlib.font_manager as fm
@@ -18,12 +19,12 @@ class Hello(IHello):
         # Check if hello.png exists in the resource space
         self._image_path = self._path / 'hello.png'
         if not self._image_path.exists():
-            self.create_picture('Welcome to OpenGMS Studio!')
+            self.create_picture('          Hello!\n\nOpenGMS Studio')
 
     def create_picture(self, text: str) -> None:
         try:
-            font_path = fm.findfont(fm.FontProperties(family='Arial'))
-            font = ImageFont.truetype(font_path, 32)
+            font_path = fm.findfont(fm.FontProperties(family='Rockwell', weight='heavy'))
+            font = ImageFont.truetype(font_path, 128)
         except (OSError, IOError):
             font = ImageFont.load_default()
 
@@ -37,7 +38,7 @@ class Hello(IHello):
         text_height = bbox[3] - bbox[1]
         
         # Add padding
-        padding = 20
+        padding = ceil(text_width * 0.05)
         width = text_width + padding * 2
         height = text_height + padding * 2
 
@@ -51,9 +52,6 @@ class Hello(IHello):
         img.save(self._image_path, 'PNG')
     
     def get_picture(self) -> io.BytesIO:
-        if not self._image_path.exists():
-            self.create_picture('Welcome to OpenGMS Studio!')
-
         with open(self._image_path, 'rb') as f:
             return io.BytesIO(f.read())
 
