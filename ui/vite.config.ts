@@ -5,7 +5,7 @@ import path from "path"
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), '')
+    const env = loadEnv(mode, path.resolve(__dirname, '..'), '')
 
     return {
         plugins: [
@@ -41,8 +41,9 @@ export default defineConfig(({ mode }) => {
         },
         resolve: {
             alias: {
-                "@": path.resolve(__dirname, "./src"),
-                "@scenario": path.resolve(process.cwd(), "./scenario"),
+                '@': path.resolve(__dirname, './src'),
+                '@core': path.resolve(__dirname, '../core'),
+                '@scenario': path.resolve(__dirname, '../scenario'),
             },
         },
         optimizeDeps: {

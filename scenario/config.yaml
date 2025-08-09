@@ -1,6 +1,4 @@
-module_root: scenario
+module_prefix: scenario
+module_postfix: .node.src
 scenario_nodes:
-  - name: names
   - name: hello
-    dependencies:
-      - names

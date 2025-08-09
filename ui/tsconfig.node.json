@@ -21,7 +21,12 @@
     "noUnusedParameters": false,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@core/*": ["../core/*"],
+      "@scenario/*": ["../scenario/*"],
+    }
   },
   "include": ["vite.config.ts"]
 }
