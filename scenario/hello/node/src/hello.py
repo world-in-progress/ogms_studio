@@ -23,8 +23,8 @@ class Hello(IHello):
 
     def create_picture(self, text: str) -> None:
         try:
-            font_path = fm.findfont(fm.FontProperties(family='Rockwell', weight='heavy'))
-            font = ImageFont.truetype(font_path, 128)
+            font_path = fm.findfont(fm.FontProperties(family='Rockwell'))
+            font = ImageFont.truetype(font_path, 64, index=2)
         except (OSError, IOError):
             font = ImageFont.load_default()
 
