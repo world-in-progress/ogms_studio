@@ -10,12 +10,7 @@ from scenario.interfaces.inames import INames
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     NOODLE_INIT(app)
-    noodle.mount_node('name', 'names')
-    with noodle.connect_node(INames, 'name', 'lw') as names:
-        crm = names.crm
-        crm.add_name('Alice')
-        crm.add_name('Bob')
-        crm.add_name('Charlie')
+    noodle.mount_node('hello', 'hello')
     
     # Create ready flag file
     ready_file = settings.MEMORY_TEMP_PATH / 'noodle_ready.flag'
@@ -27,7 +22,6 @@ async def lifespan(app: FastAPI):
     if ready_file.exists():
         ready_file.unlink()
     
-    noodle.unmount_node('name')
     NOODLE_TERMINATE()
 
 

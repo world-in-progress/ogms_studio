@@ -2,8 +2,9 @@ import React, { useCallback, useState } from 'react'
 import IconBar from './iconBar/iconBar'
 import { IconBarClickHandlers } from './iconBar/types'
 import ResourceTreeComponent from './resourceScene/resourceTreeComponent'
-import Hello from './hello/hello'
+// import Hello from './hello/hello'
 import TabBar from './tabBar/tabBar'
+import Hello from '@scenario/hello/ui/src/Hello'
 
 export default function Framework() {
 
