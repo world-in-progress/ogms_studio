@@ -9,10 +9,6 @@
     "baseUrl": ".",
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "@/*": ["./src/*"],
-      "@scenario/*": ["../scenario/*"]
-    },
     "jsx": "react-jsx",
     "types": ["react"]
   }
