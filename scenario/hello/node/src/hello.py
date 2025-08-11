@@ -22,11 +22,20 @@ class Hello(IHello):
             self.create_picture('          Hello!\n\nOpenGMS Studio')
 
     def create_picture(self, text: str) -> None:
-        try:
-            font_path = fm.findfont(fm.FontProperties(family='Rockwell'))
-            font = ImageFont.truetype(font_path, 64, index=2)
-        except (OSError, IOError):
-            font = ImageFont.load_default()
+        font = None
+        font_size = 64
+        font_families = ['Rockwell', 'Arial', 'Times New Roman']
+
+        for family in font_families:
+            try:
+                font_path = fm.findfont(fm.FontProperties(family=family, weight='bold'))
+                font = ImageFont.truetype(font_path, font_size)
+                break
+            except (OSError, IOError):
+                continue
+        
+        if font is None:
+            font = ImageFont.load_default(size=font_size)
 
         # Create a temporary image to measure text
         temp_img = Image.new('RGBA', (1, 1))
