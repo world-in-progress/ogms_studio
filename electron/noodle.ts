@@ -1,21 +1,27 @@
 import fs from 'fs'
 import path from 'path'
+import LdleContext from './ipc/ldle/context'
 import { spawn, ChildProcess } from 'child_process'
 
+const ctx = LdleContext.getInstance()
 let noodleProcess: ChildProcess | null = null
 
-export function startNoodle(): Promise<void> {
+export function startLdle(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-        const readyFlagPath = path.join(process.cwd(), 'temp', 'noodle_ready.flag')
+        // const readyFlagPath = path.join(process.cwd(), 'temp', 'noodle_ready.flag')
 
-        // Clean up any existing flag file
-        if (fs.existsSync(readyFlagPath)) {
-            fs.unlinkSync(readyFlagPath)
-        }
+        // // Clean up any existing flag file
+        // if (fs.existsSync(readyFlagPath)) {
+        //     fs.unlinkSync(readyFlagPath)
+        // }
 
         // Watch for the ready flag file
         const checkReady = () => {
-            if (fs.existsSync(readyFlagPath)) {
+            // if (fs.existsSync(readyFlagPath)) {
+            //     resolve()
+            //     return
+            // }
+            if (ctx.is_ready) {
                 resolve()
                 return
             }
@@ -62,7 +68,7 @@ export function startNoodle(): Promise<void> {
     })
 }
 
-export function stopNoodle(): void {
+export function stopLdle(): void {
     if (noodleProcess) {
         noodleProcess.kill()
         noodleProcess = null

@@ -1,0 +1,7 @@
+[project]
+name = "ldle"
+version = "0.1.0"
+description = "Local data linking environment for OpenGMS Studio"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []

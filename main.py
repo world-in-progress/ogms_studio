@@ -1,5 +1,5 @@
 import uvicorn
-from noodle import settings
+from ldle import settings
 
 if __name__ == '__main__':
     import os
@@ -9,7 +9,7 @@ if __name__ == '__main__':
         os.environ['PROJ_LIB'] = os.path.join(venv_path, 'Lib', 'site-packages', 'osgeo', 'data', 'proj')
     
     uvicorn.run(
-        'noodle.main:app',
+        'ldle.main:app',
         host='0.0.0.0', port=settings.SERVER_PORT,
         reload=settings.RELOAD, log_level='info'
     )

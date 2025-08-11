@@ -4,6 +4,7 @@ requires-python = ">=3.12"
 
 [manifest]
 members = [
+    "ldle",
     "node",
     "ogms-studio",
 ]
@@ -425,6 +426,11 @@ wheels = [
 ]
 
 [[package]]
+name = "ldle"
+version = "0.1.0"
+source = { virtual = "ldle" }
+
+[[package]]
 name = "markdown-it-py"
 version = "3.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -618,11 +624,19 @@ dependencies = [
     { name = "py-noodle" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "ldle" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "gdal", specifier = "==3.10.2" },
     { name = "py-noodle", specifier = ">=0.1.1" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ldle", virtual = "ldle" }]
 
 [[package]]
 name = "packaging"

@@ -66,6 +66,9 @@ export default class HelloRenderer {
     private stopTimeout: NodeJS.Timeout | null = null
     private renderControl: { start: () => void, stop: () => void }
 
+    // Refresh cleanup
+    private cleanup?: Cleanup
+
     constructor(canvas: HTMLCanvasElement) {
         this.canvas = canvas
 
@@ -155,7 +158,6 @@ export default class HelloRenderer {
         this.particleUpdateShader = gll.createShader(gl, particleUpdateShaderCode)
 
         // Get imagebitmap from api: /local/noodle/hello
-        // const helloBitmap = await gll.loadImage('/images/hello/hello.png')
         const helloBitmap = await gll.loadImage('/local/noodle/hello')
         this.helloImageTexture = gll.createTexture2D(gl, 0, helloBitmap.width, helloBitmap.height, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, helloBitmap)
         this.helloTexture = this.fitTexture(this.helloImageTexture)
@@ -167,6 +169,31 @@ export default class HelloRenderer {
         this.particleBackgroundTexture = this.helloTexture
 
         this.setParticleMaterial(true)
+
+        // Set app refresh callback
+        this.cleanup = window.electronAPI?.onRefresh(async () => {
+            // Delete previous texture resource
+            gl.deleteTexture(this.helloTexture)
+            gl.deleteTexture(this.helloImageTexture)
+            gl.deleteTexture(this.cooperationTexture)
+            gl.deleteTexture(this.cooperationImageTexture)
+
+            // Refresh textures
+            const helloBitmap = await gll.loadImage('/local/noodle/hello')
+            this.helloImageTexture = gll.createTexture2D(gl, 0, helloBitmap.width, helloBitmap.height, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, helloBitmap)
+            this.helloTexture = this.fitTexture(this.helloImageTexture)
+
+            const cooperationBitmap = await gll.loadImage('/images/hello/cooperation.png')
+            this.cooperationImageTexture = gll.createTexture2D(gl, 0, cooperationBitmap.width, cooperationBitmap.height, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, cooperationBitmap)
+            this.cooperationTexture = this.fitTexture(this.cooperationImageTexture)
+
+            this.particleBackgroundTexture = this.helloTexture
+
+            this.setParticleMaterial(true)
+
+            // Trigger a render update
+            this.render()
+        })
 
         this.isReady = true
 
@@ -428,5 +455,10 @@ export default class HelloRenderer {
         gl.deleteTexture(this.particleTexture2)
         gl.deleteFramebuffer(this.particleUpdateFBO1)
         gl.deleteFramebuffer(this.particleUpdateFBO2)
+
+        if (this.cleanup) {
+            this.cleanup()
+            this.cleanup = undefined
+        }
     }
 }
