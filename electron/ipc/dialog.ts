@@ -1,3 +1,6 @@
+// Handlers removed from main.ts
+// !!!! Cannot use directly
+// TODO: Implement file dialog handlers
 import { dialog, ipcMain } from 'electron'
 
 ipcMain.handle('dialog:openFile', async () => {

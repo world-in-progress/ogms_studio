@@ -1,5 +1,4 @@
 import logging
-import requests
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
@@ -17,14 +16,9 @@ async def lifespan(app: FastAPI):
     # Notify Electron main process that Ldle is ready
     pipe.i_am_ready()
 
-    # # Create ready flag file
-    # ready_file = settings.MEMORY_TEMP_PATH / 'noodle_ready.flag'
-    # ready_file.write_text('Noodle is ready')
-
     yield
     
     NOODLE_TERMINATE()
-
 
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application."""
