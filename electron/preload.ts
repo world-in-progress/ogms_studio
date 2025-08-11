@@ -7,7 +7,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     openTxtFileDialog: () => ipcRenderer.invoke('dialog:openTxtFile'),
     openInpFileDialog: () => ipcRenderer.invoke('dialog:openInpFile'),
     openCsvFileDialog: () => ipcRenderer.invoke('dialog:openCsvFile'),
-    onRefresh: (callback: () => void) => registerRefreshHandler(callback)
+    onRefresh: (refreshKey: string, callback: () => void) => registerRefreshHandler(refreshKey, callback)
 })
 
 console.log('Preload script loaded.')

@@ -14,10 +14,10 @@ def i_am_ready():
         logger.error(f'Error notifying Electron main process: {e}')
         raise
 
-def refresh_app():
+def refresh(refresh_key: str = ''):
     try:
-        response = requests.get(f'{MESSAGE_PIPE_URL}/refresh')
+        response = requests.get(f'{MESSAGE_PIPE_URL}/refresh', params={'refreshKey': refresh_key})
         if response.status_code != 200:
             raise Exception(f'{response.text}')
     except Exception as e:
-        logger.error(f'Error refreshing app: {e}')
+        logger.error(f'Error refreshing app for "{refresh_key}": {e}')

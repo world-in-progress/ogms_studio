@@ -1,11 +1,12 @@
 import { ipcRenderer } from 'electron'
 
-export default function registerRefreshHandler(callback: () => void): () => void {
-    const handleRefrensh = () => callback()
-    ipcRenderer.on('app-refresh', handleRefrensh)
-    
+export default function registerRefreshHandler(refreshKey: string, callback: () => void): () => void {
+    const channel = `app-refresh:${refreshKey}`
+    const handleRefresh = () => callback()
+    ipcRenderer.on(channel, handleRefresh)
+
     // Return a cleanup function to remove the listener
     return () => {
-        ipcRenderer.removeListener('app-refresh', handleRefrensh)
+        ipcRenderer.removeListener(channel, handleRefresh)
     }
 }

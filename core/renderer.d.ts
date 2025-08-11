@@ -10,7 +10,7 @@ declare global {
             openTxtFileDialog: () => Promise<string | null>,
             openInpFileDialog: () => Promise<string | null>,
             openCsvFileDialog: () => Promise<string | null>,
-            onRefresh: (callback: () => void) => Cleanup
+            onRefresh: (refreshKey: string, callback: () => void) => Cleanup
         }
     }
 }

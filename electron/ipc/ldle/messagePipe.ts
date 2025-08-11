@@ -15,11 +15,15 @@ export function startLdleMessagePipe(port: number = 3001, mainWindow: BrowserWin
             res.status(200).send('LDLE ready flag received')
         })
 
-        app.get('/refresh', (_, res) => {
+        app.get('/refresh', (req, res) => {
             if (!ctx.is_ready) res.status(503).send('LDLE not ready')
             else {
+                // Get the refreshKey from query parameters
+                const refreshKey = req.query.refreshKey as string
+                const channel = `app-refresh:${refreshKey || ''}`
+                
                 // Send an update message to the renderer process
-                mainWindow.webContents.send('app-refresh')
+                mainWindow.webContents.send(channel, refreshKey)
                 res.status(200).send('LDLE update sent message')
             }
         })

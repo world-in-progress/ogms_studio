@@ -171,7 +171,7 @@ export default class HelloRenderer {
         this.setParticleMaterial(true)
 
         // Set app refresh callback
-        this.cleanup = window.electronAPI?.onRefresh(async () => {
+        this.cleanup = window.electronAPI?.onRefresh('hello', async () => {
             // Delete previous texture resource
             gl.deleteTexture(this.helloTexture)
             gl.deleteTexture(this.helloImageTexture)
