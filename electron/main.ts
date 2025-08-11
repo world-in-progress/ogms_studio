@@ -1,101 +1,15 @@
 import path from 'path'
-import { app, BrowserWindow, ipcMain, dialog, screen, Menu } from 'electron'
+import { Server } from 'http'
+import { app, BrowserWindow, screen } from 'electron'
 
-import { startNoodle, stopNoodle } from './noodle'
+import createMenu from './menu'
+import { startLdle, stopLdle } from './noodle'
+import { startLdleMessagePipe, stopLdleMessagePipe } from './ipc/ldle/messagePipe'
 
-let apiDocsWindow: BrowserWindow | null = null
-
-function createApiDocsWindow() {
-    if (apiDocsWindow) {
-        apiDocsWindow.focus()
-        return
-    }
-
-    apiDocsWindow = new BrowserWindow({
-		width: 1200,
-		height: 800,
-        title: 'API Documentation',
-		fullscreen: true, // fullscreen as default
-		autoHideMenuBar: true,
-        webPreferences: {
-            nodeIntegration: false,
-            contextIsolation: true
-        },
-        show: false
-    })
-
-    apiDocsWindow.loadURL('http://127.0.0.1:8000/docs')
-    apiDocsWindow.once('ready-to-show', () => {
-        apiDocsWindow?.show()
-    })
-
-    apiDocsWindow.on('closed', () => {
-        apiDocsWindow = null
-    })
-
-    apiDocsWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
-        console.error('Failed to load API docs:', errorDescription)
-        if (apiDocsWindow) {
-            apiDocsWindow.loadFile(path.join(__dirname, '../templates/api-error.html'))
-        }
-    })
-}
-
-function createMenu() {
-    const isMac = process.platform === 'darwin'
-    
-    const template: Electron.MenuItemConstructorOptions[] = [
-        ...(isMac ? [{
-            role: 'appMenu' as const,
-            submenu: [
-                { role: 'about' as const },
-                {
-                    label: 'API Documentation',
-                    accelerator: 'CmdOrCtrl+Shift+A',
-                    click: () => {
-                        createApiDocsWindow()
-                    }
-                },
-                { type: 'separator' as const },
-                { role: 'services' as const },
-                { type: 'separator' as const },
-                { role: 'hide' as const },
-                { role: 'hideOthers' as const },
-                { role: 'unhide' as const },
-                { type: 'separator' as const },
-                { role: 'quit' as const }
-            ]
-        }]
-        : [{
-            label: 'tools',
-            submenu: [
-                {
-                    label: 'API Documentation',
-                    accelerator: 'CmdOrCtrl+Shift+A',
-                    click: () => {
-                        createApiDocsWindow()
-                    }
-                },
-                { type: 'separator' as const },
-                { role: 'quit' as const }
-            ]
-        }]),
-        {
-            role: 'viewMenu' as const
-        },
-        {
-            role: 'windowMenu' as const
-        }
-    ]
-    
-    const menu = Menu.buildFromTemplate(template)
-    Menu.setApplicationMenu(menu)
-}
+let ldleMessagePipe: Server | null = null
 
 async function createWindow(): Promise<void> {
-    // Start Noodle before creating window
-    await startNoodle()
-
+    // Create the main application window
 	const mainWindow = new BrowserWindow({
 		width: 1200,
 		height: 800,
@@ -108,7 +22,9 @@ async function createWindow(): Promise<void> {
 		},
 	})
 
-    createMenu()
+    // Start local Noodle (Ldle) and message pipe between main process and Ldle
+    ldleMessagePipe = await startLdleMessagePipe(3001, mainWindow)
+    await startLdle()
 
 	// const startUrl = process.env.ELECTRON_START_URL || url.format({
 	//   pathname: path.join(__dirname, '../templates/index.html'), 
@@ -138,83 +54,9 @@ async function createWindow(): Promise<void> {
 	})
 }
 
-ipcMain.handle('dialog:openFile', async () => {
-	const { canceled, filePaths } = await dialog.showOpenDialog({
-		properties: ['openFile'],
-		filters: [
-			{ name: 'Vector Files', extensions: ['shp', 'geojson'] },
-			{ name: 'All Files', extensions: ['*'] }
-		],
-	})
-
-	if (canceled || filePaths.length === 0) {
-		return null
-	}
-	return filePaths[0]
-})
-
-ipcMain.handle('dialog:openTiffFile', async () => {
-	const { canceled, filePaths } = await dialog.showOpenDialog({
-		properties: ['openFile'],
-		filters: [
-			{ name: 'TIF Files', extensions: ['tif', 'tiff'] },
-			{ name: 'All Files', extensions: ['*'] }
-		],
-	})
-
-	if (canceled || filePaths.length === 0) {
-		return null
-	}
-	return filePaths[0]
-})
-
-ipcMain.handle('dialog:openTxtFile', async () => {
-	const { canceled, filePaths } = await dialog.showOpenDialog({
-		properties: ['openFile'],
-		filters: [
-			{ name: 'TXT Files', extensions: ['txt'] },
-			{ name: 'All Files', extensions: ['*'] }
-		],
-	})
-
-	if (canceled || filePaths.length === 0) {
-		return null
-	}
-	return filePaths[0]
-})
-
-ipcMain.handle('dialog:openInpFile', async () => {
-	const { canceled, filePaths } = await dialog.showOpenDialog({
-		properties: ['openFile'],
-		filters: [
-			{ name: 'INP Files', extensions: ['inp'] },
-			{ name: 'All Files', extensions: ['*'] }
-		],
-	})
-
-	if (canceled || filePaths.length === 0) {
-		return null
-	}
-	return filePaths[0]
-})
-
-ipcMain.handle('dialog:openCsvFile', async () => {
-	const { canceled, filePaths } = await dialog.showOpenDialog({
-		properties: ['openFile'],
-		filters: [
-			{ name: 'CSV Files', extensions: ['csv'] },
-			{ name: 'All Files', extensions: ['*'] }
-		],
-	})
-
-	if (canceled || filePaths.length === 0) {
-		return null
-	}
-	return filePaths[0]
-})
-
 app.whenReady().then(() => {
 	createWindow()
+    createMenu()
 
 	// For macOS, re-create a window in the app
 	// When the dock icon is clicked and there are no other windows open
@@ -225,7 +67,10 @@ app.whenReady().then(() => {
 
 app.on('before-quit', () => {
     // Stop Noodle before quitting
-    stopNoodle()
+    stopLdle()
+    if (ldleMessagePipe) {
+        stopLdleMessagePipe(ldleMessagePipe)
+    }
 })
 
 app.on('window-all-closed', function () {

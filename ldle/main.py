@@ -1,25 +1,27 @@
-from pathlib import Path
+import logging
+import requests
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from pynoodle import noodle, NOODLE_INIT, NOODLE_TERMINATE
 
-from noodle import settings
+from .core import message_pipe as pipe
+
+logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     NOODLE_INIT(app)
     noodle.mount_node('hello', 'hello')
     
-    # Create ready flag file
-    ready_file = settings.MEMORY_TEMP_PATH / 'noodle_ready.flag'
-    ready_file.write_text('Noodle is ready')
+    # Notify Electron main process that Ldle is ready
+    pipe.i_am_ready()
+
+    # # Create ready flag file
+    # ready_file = settings.MEMORY_TEMP_PATH / 'noodle_ready.flag'
+    # ready_file.write_text('Noodle is ready')
 
     yield
-    
-    # Clean up flag file
-    if ready_file.exists():
-        ready_file.unlink()
     
     NOODLE_TERMINATE()
 

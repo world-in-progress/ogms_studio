@@ -3,17 +3,25 @@
   "version": "1.0.0",
   "main": "electron/dist/main.js",
   "scripts": {
-    "build:electron": "tsc -p electron/tsconfig.json",
+    "build:electron": "cd electron && vite build",
     "start": "npm run build:electron && electron .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "workspaces": [
+    "ui",
+    "scenario/*/ui"
+  ],
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "typescript": "^5.9.2"
+    "@types/express": "^5.0.3",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.1",
+    "glob": "^11.0.0"
   },
   "dependencies": {
-    "electron": "^36.2.1"
+    "electron": "^36.2.1",
+    "express": "^5.1.0"
   }
 }
